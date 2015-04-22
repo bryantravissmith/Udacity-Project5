@@ -1,0 +1,27 @@
+---
+title: "Loan Data"
+author: "Bryan Smith"
+date: "April 8, 2015"
+output: pdf_document
+---
+
+```{r}
+setwd('/Users/bryantravissmith/Desktop/Udacity-Project5/data/')
+red <- read.csv("WineQualityReds.csv")
+white <- read.csv("WineQualityWhites.csv")
+red$type = 'red'
+white$type = 'white'
+
+wine <- rbind(red,white)
+wine$type <- factor(wine$type)
+wine$quality <- factor(wine$quality)
+
+
+wine$density <- 1000*wine$density
+wine$free.sulfur.dioxide <- wine$free.sulfur.dioxide/1000
+wine$total.sulfur.dioxide <- wine$total.sulfur.dioxide/1000
+summary(wine$type)
+summary(wine$quality)
+write.table(wine,"wine.csv",sep=",")
+test = read.csv('wine.csv')
+```

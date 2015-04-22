@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css"/>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css"/>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<!--<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script> -->
+
+  <script type="text/javascript">
+
+    function draw(data) {
+    
+    /*
+      D3.js setup code
+    */
+      my_data = data
+      "use strict";
+      var margin = 48,
+          width = 1024 - margin,
+          height = 768 - margin;
+
+        //debugger;
+      var svg = d3.select(".content")
+          .append("svg")
+            .attr("width", width + margin)
+            .attr("height", height + margin)
+          .append('g')
+              .attr('class','chart');
+    /*
+      D3.js Chart Construction Code
+    */
+
+    //debugger;
+
+    var formatCount = d3.format(",.0f");
+
+    var alcohol_extent = d3.extent(data,function(d){
+      return +d['alcohol'];
+    });
+
+    var alcohol_values = [];
+
+    data.forEach(function(d){
+      alcohol_values.push(+d['alcohol'])
+    });
+
+
+    var x = d3.scale.linear().domain(alcohol_extent).range([margin,width]);
+
+    var hist_data = d3.layout.histogram().bins(x.ticks(20))(alcohol_values);
+
+    var y = d3.scale.linear().domain([0,d3.max(hist_data,function(d){ return d.y; })]).range([height,margin]);
+
+    var xAxis = d3.svg.axis().scale(x).orient('bottom');
+
+    var bar = svg.selectAll('.bar')
+      .data(hist_data)
+      .enter()
+      .append('g')
+      .attr('class','bar')
+      .attr('transform',function(d) { return 'translate(' +x(d.x) + "," + y(d.y) + ")";});
+
+    bar.append('rect')
+      .attr('x',1)
+      .attr('width',width/20)
+      .attr('height',function(d) { return height - y(d.y);});
+
+    bar.append("text")
+      .attr("dy",".75em")
+      .attr('y',6)
+      .attr('x', width/40 -1)
+      .attr('text-anchor','middle')
+      .text(function(d) { return formatCount(d.y);});
+
+    svg.append("g")
+      .attr('class', 'x axis')
+      .attr('transform','translate(0,'+height+')')
+      .call(xAxis);
+
+    debugger;
+
+
+    
+
+
+    
+
+    /*
+      Dimple.js Chart construction code
+    
+
+        var myChart = new dimple.chart(svg, data);
+        var x = myChart.addTimeAxis("x", "year");
+        x.dateParseFormat = "%Y";
+        x.tickFormat = "%Y";
+        x.timeInterval = 4;
+        myChart.addMeasureAxis("y", "attendance");
+        //myChart.addSeries(null, dimple.plot.bar);
+        myChart.addSeries(null, dimple.plot.scatter);
+        myChart.addSeries(null, dimple.plot.line);
+        //myChart.addSeries("stage", dimple.plot.bar);
+        myChart.draw();
+
+      */
+
+        function update(variable){
+          var formatCount = d3.format(",.0f");
+
+          var extent = d3.extent(data,function(d){
+            return +d[variable];
+          });
+
+          var values = [];
+
+          data.forEach(function(d){
+            values.push(+d[variable])
+          });
+
+          d3.selectAll(".bar").remove()
+          d3.selectAll(".x").remove()
+
+          var x = d3.scale.linear().domain(extent).range([margin,width]);
+
+          var hist_data = d3.layout.histogram().bins(x.ticks(20))(values);
+
+          var y = d3.scale.linear().domain([0,d3.max(hist_data,function(d){ return d.y; })]).range([height,margin]);
+
+          var xAxis = d3.svg.axis().scale(x).orient('bottom');
+
+          var bar = svg.selectAll('.bar')
+            .data(hist_data)
+            .enter()
+            .append('g')
+            .attr('class','bar')
+            .attr('transform',function(d) { return 'translate(' +x(d.x) + "," + y(d.y) + ")";});
+
+          bar.append('rect')
+            .attr('x',1)
+            .attr('width',width/30)
+            .attr('height',function(d) { return height - y(d.y);});
+
+          bar.append("text")
+            .attr("dy",".75em")
+            .attr('y',6)
+            .attr('x', width/40 - 5)
+            .attr('text-anchor','middle')
+            .text(function(d) { return formatCount(d.y);});
+
+          svg.append("g")
+            .attr('class', 'x axis')
+            .attr('transform','translate(0,'+height+')')
+            .call(xAxis);
+        };
+        update("pH");
+      };
+
+      
+    </script>
+</head>
+<body>
+<script type="text/javascript">
+
+  /* Load Wine Data */
+  d3.csv("data/wine.csv",draw);
+
+</script>
+<style>
+.custom-restricted-width {
+    /* To limit the menu width to the content of the menu: */
+    display: inline-block;
+    /* Or set the width explicitly: */
+    /* width: 10em; */
+}
+
+.menu{
+  background: black;
+}
+
+.bar rect {
+  fill: steelblue;
+  shpae-rendering: crispEdges;
+}
+
+.bar text{
+  fill: #fff;
+}
+
+.axis path, .axis line{
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+</style>
+<div class="pure-g">
+  <div class="pure-menu custom-restricted-width pure-u-4-24 menu">
+      <span class="pure-menu-heading">Chart Type</span>
+
+      <ul class="pure-menu-list">
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">Histogram</a></li>
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">Scatter</a></li>
+      </ul>
+
+      <span class="pure-menu-heading">Wine Type</span>
+      <ul class="pure-menu-list">
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">Red Wine</a></li>
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">White Wine</a></li>
+      </ul>
+
+      <span class="pure-menu-heading">Wine Type</span>
+      <ul class="pure-menu-list">
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">3-</a></li>
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">4</a></li>
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">5-</a></li>
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">6</a></li>
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">7-</a></li>
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">8+</a></li>
+      </ul>
+  </div>
+
+  <div class="content pure-u-20-24">
+    <div class='header'>
+      Wine Quality 
+    </div>
+
+    <div class='content'>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

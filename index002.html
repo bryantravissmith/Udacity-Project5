@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css"/>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css"/>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<!--<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script> -->
+
+  
+</head>
+<body>
+
+<style>
+body {
+  font-family: sans-serif;
+  font-weight: 100;
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+
+.custom-restricted-width {
+    /* To limit the menu width to the content of the menu: */
+    display: inline-block;
+    /* Or set the width explicitly: */
+    /* width: 10em; */
+}
+
+.menu{
+  background: black;
+}
+
+li.pure-menu-selected{
+  background: steelBlue;
+}
+
+li.pure-menu-selected a.pure-menu-link{
+  color:white;
+  font-weight: bold;
+  text-align: right;
+}
+
+.bar rect {
+  fill: steelblue;
+  shpae-rendering: crispEdges;
+}
+
+.redbar rect {
+  fill: red;
+  opacity: 0.5;
+  shpae-rendering: crispEdges;
+}
+
+.whitebar rect{
+  fill: yellow;
+  opacity: 0.5;
+  shpae-rendering: crispEdges;
+}
+
+.bar text{
+  fill: #fff;
+}
+
+.axis path, .axis line{
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+</style>
+<div class="pure-g">
+  <div class="pure-menu custom-restricted-width pure-u-4-24 menu">
+      <span class="pure-menu-heading">Chart Type</span>
+
+      <ul class="pure-menu-list">
+          <li class="pure-menu-item" ><a href="#" class="pure-menu-link">Histogram</a></li>
+          <li class="pure-menu-item"><a href="#" class="pure-menu-link">Scatter</a></li>
+      </ul>
+
+      <span class="pure-menu-heading">Wine Type</span>
+      <ul class="pure-menu-list">
+          <li class="pure-menu-item pure-menu-selected red-wine-button" onclick='clickRedWine()'><a href="#" class="pure-menu-link">Red Wine</a></li>
+          <li class="pure-menu-item pure-menu-selected white-wine-button" onclick='clickWhiteWine()'><a href="#" class="pure-menu-link">White Wine</a></li>
+      </ul>
+
+      <span class="pure-menu-heading">Wine Type</span>
+      <ul class="pure-menu-list">
+          <li class="pure-menu-item pure-menu-selected three-button" onclick='click3Wine()'><a href="#" class="pure-menu-link">3-</a></li>
+          <li class="pure-menu-item pure-menu-selected four-button" onclick='click4Wine()'><a href="#" class="pure-menu-link">4</a></li>
+          <li class="pure-menu-item pure-menu-selected five-button" onclick='click5Wine()'><a href="#" class="pure-menu-link">5-</a></li>
+          <li class="pure-menu-item pure-menu-selected six-button" onclick='click6Wine()'><a href="#" class="pure-menu-link">6</a></li>
+          <li class="pure-menu-item pure-menu-selected seven-button" onclick='click7Wine()'><a href="#" class="pure-menu-link">7-</a></li>
+          <li class="pure-menu-item pure-menu-selected eight-button" onclick='click8Wine()'><a href="#" class="pure-menu-link">8</a></li>
+          <li class="pure-menu-item pure-menu-selected nine-button" onclick='click9Wine()'><a href="#" class="pure-menu-link">9</a></li>
+      </ul>
+  </div>
+
+  <div class="content pure-u-20-24">
+    <div class='header'>
+      Wine Quality 
+    </div>
+
+    <div class='content'>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+<script type="text/javascript">
+
+    "use strict";
+
+
+    //Store the types of valid wines and quality scores
+    var wine_types = ["red","white"];
+    var quality_types = [3,4,5,6,7,8,9];
+
+    var redwineon = true;
+    var whitewineon = true;
+    var threeon = true;
+    var fouron = true;
+    var fiveon = true;
+    var sixon = true;
+    var sevenon = true;
+    var eighton = true;
+    var nineon = true;
+
+    var currentVariable = 'alcohol';
+
+    var include_types = ["red","white"];
+    var include_qualities = [1,2,3,4,5,6,7,8,9,10];
+    var subset_wine = false;
+    var subset_quality = false;
+    var use_percentage = false;
+
+    function click3Wine(){
+      if (threeon == true){
+        threeon = false;
+        d3.select(".three-button").classed("pure-menu-selected", false);
+        var index = include_qualities.indexOf(3);
+        include_qualities.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        threeon = true;
+        d3.select(".three-button").classed("pure-menu-selected", true);
+        include_qualities.push(3);
+        drawHistogram(currentVariable);
+      }
+      
+    }
+
+    function click4Wine(){
+      if (fouron == true){
+        fouron = false;
+        d3.select(".four-button").classed("pure-menu-selected", false);
+        var index = include_qualities.indexOf(4);
+        include_qualities.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        fouron = true;
+        d3.select(".four-button").classed("pure-menu-selected", true);
+        include_qualities.push(4);
+        drawHistogram(currentVariable);
+      } 
+    }
+
+    function click5Wine(){
+      if (fiveon == true){
+        fiveon = false;
+        d3.select(".five-button").classed("pure-menu-selected", false);
+        var index = include_qualities.indexOf(5);
+        include_qualities.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        fiveon = true;
+        d3.select(".five-button").classed("pure-menu-selected", true);
+        include_qualities.push(5);
+        drawHistogram(currentVariable);
+      } 
+    }
+
+    function click6Wine(){
+      if (sixon == true){
+        sixon = false;
+        d3.select(".six-button").classed("pure-menu-selected", false);
+        var index = include_qualities.indexOf(6);
+        include_qualities.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        sixon = true;
+        d3.select(".six-button").classed("pure-menu-selected", true);
+        include_qualities.push(6);
+        drawHistogram(currentVariable);
+      } 
+    }
+
+    function click7Wine(){
+      if (sevenon == true){
+        sevenon = false;
+        d3.select(".seven-button").classed("pure-menu-selected", false);
+        var index = include_qualities.indexOf(7);
+        include_qualities.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        sevenon = true;
+        d3.select(".seven-button").classed("pure-menu-selected", true);
+        include_qualities.push(7);
+        drawHistogram(currentVariable);
+      } 
+    }
+
+    function click8Wine(){
+      if (eighton == true){
+        eighton = false;
+        d3.select(".eight-button").classed("pure-menu-selected", false);
+        var index = include_qualities.indexOf(8);
+        include_qualities.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        eighton = true;
+        d3.select(".eight-button").classed("pure-menu-selected", true);
+        include_qualities.push(8);
+        drawHistogram(currentVariable);
+      } 
+    }
+
+    function click9Wine(){
+      if (nineon == true){
+        nineon = false;
+        d3.select(".nine-button").classed("pure-menu-selected", false);
+        var index = include_qualities.indexOf(9);
+        include_qualities.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        nineon = true;
+        d3.select(".nine-button").classed("pure-menu-selected", true);
+        include_qualities.push(9);
+        drawHistogram(currentVariable);
+      } 
+    }
+
+    function clickRedWine(){
+      if (redwineon == true){
+        redwineon = false;
+        d3.select(".red-wine-button").classed("pure-menu-selected", false);
+        var index = include_types.indexOf('red');
+        include_types.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        redwineon = true;
+        d3.select(".red-wine-button").classed("pure-menu-selected", true);
+        include_types.push('red');
+        drawHistogram(currentVariable);
+      }
+      
+    }
+
+    function clickWhiteWine(){
+      if (whitewineon == true){
+        whitewineon = false;
+        d3.select(".white-wine-button").classed("pure-menu-selected", false);
+        var index = include_types.indexOf('white');
+        include_types.splice(index,1);
+        drawHistogram(currentVariable);
+      } else {
+        whitewineon = true;
+        d3.select(".white-wine-button").classed("pure-menu-selected", true);
+        include_types.push('white');
+        drawHistogram(currentVariable);
+      }
+      
+    }
+
+    //Create global variables that can be altered by uer interactions to subset data
+    
+
+    //Create Variable to Store Wine Data
+    var wine_data = null;
+
+    //Set Dimentions for Graphics
+    var margin = 48,
+        width = 1024 - margin,
+        height = 768 - margin;
+
+    //Format for displaying numbers
+    var formatCount = d3.format(",.0f");
+ 
+    //Create varaible for SVG and add SVG to page
+    var svg = d3.select(".content")
+          .append("svg")
+            .attr("width", width + margin)
+            .attr("height", height + margin)
+          .append('g')
+              .attr('class','chart');
+
+    function remove(){
+      removeHistogram();
+      removeScatter();
+    };
+
+    function removeHistogram(){
+      d3.selectAll(".bar").remove()
+      d3.selectAll(".x").remove()
+    };
+
+    function removeScatter(){
+
+    };
+
+    function drawBars(){
+
+    };
+
+    function getFilteredData(){
+      
+      var filtered_data = wine_data.filter(function(d) {
+
+        return include_types.indexOf(d['type']) > -1 && include_qualities.indexOf(+d['quality']) > -1
+                      
+      });
+
+      return filtered_data
+    }
+
+    function getRedWineData(data){
+      var red_data = data.filter(function(d){
+        return d['type'] == "red"
+      });
+      return red_data;
+    }
+
+    function getWhiteWineData(data){
+      var white_data = data.filter(function(d){
+        return d['type'] == "white"
+      });
+      return white_data;
+    }
+
+    function getGoodWineData(data){
+      var good_data = data.filter(function(d){
+        return +d['quality'] > 6;
+      });
+      return good_data;
+    }
+
+    function getBadWineData(data){
+      var bad_data = data.filter(function(d){
+        return +d['quality'] <= 6;
+      });
+      return bad_data;
+    }
+
+    function drawHistogram(variable){
+
+      var currentData = getFilteredData();
+      var extent = d3.extent(wine_data,function(d){
+        return +d[variable];
+      });
+
+      var values = [];
+
+      currentData.forEach(function(d){
+        values.push(+d[variable])
+      });
+
+      remove();
+
+      var x = d3.scale.linear().domain(extent).range([margin,width]);
+
+      var hist_data = d3.layout.histogram().bins(x.ticks(20))(values);
+
+      var number_of_points = d3.sum(hist_data,function(d){ return d.y; });
+
+      if (number_of_points > 0){
+
+        var max_value = d3.max(hist_data,function(d){ return d.y});
+
+
+        //var y = d3.scale.linear().domain([0,d3.max(hist_data,function(d){ return d.y; })]).range([height,margin]);
+        var y = d3.scale.linear().domain([0,max_value/number_of_points]).range([height,margin]);
+        var xAxis = d3.svg.axis().scale(x).orient('bottom');
+
+        var bar = svg.selectAll('.bar')
+          .data(hist_data)
+          .enter()
+          .append('g')
+          .attr('class','bar')
+          .attr('transform',function(d) { return 'translate(' +x(d.x) + "," + y(d.y/number_of_points) + ")";});
+
+        
+        bar.append('rect')
+          .attr('x',1)
+          .attr('width',width/30)
+          .attr('height',function(d) { return height - y(d.y/number_of_points);});
+
+        bar.append("text")
+          .attr("dy",".75em")
+          .attr('y',6)
+          .attr('x', width/40 - 5)
+          .attr('text-anchor','middle')
+          .text(function(d) { return formatCount(d.y*100/number_of_points)+"%";});
+
+        svg.append("g")
+          .attr('class', 'x axis')
+          .attr('transform','translate(0,'+height+')')
+          .call(xAxis);
+        
+      }
+    };
+
+    function draw(data) {
+      wine_data = data;
+      drawHistogram('alcohol');
+
+      function update(variable){
+        drawHistogram(variable);
+      };
+      //update("chlorides");
+      //update("pH");
+    };
+
+      
+    </script>
+    <script type="text/javascript">
+
+  /* Load Wine Data */
+  d3.csv("data/wine.csv",draw);
+
+</script>
+</html>
