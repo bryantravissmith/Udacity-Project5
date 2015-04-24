@@ -41,15 +41,8 @@ li.pure-menu-selected{
 }
 
 
-.pure-menu-selected .pure-menu-link, .pure-menu-selected, .pure-menu-selected a {
+.pure-menu-selected .pure-menu-link, .pure-menu-selected {
   color: #FFF;
-}
-.pure-menu-selected .pure-menu-link, .pure-menu-selected .pure-menu-link:visited {
-  color:#FFF;
-}
-
-.pure-menu-selected .pure-menu-link, .pure-menu-selected .pure-menu-link:visited {
-  color:#FFF;
 }
 
 li.pure-menu-item a{
@@ -150,7 +143,7 @@ This is the parent `<div>` that contains the menu and the content area.
     display: block; /* show this only on small screens */
     top: 0;
     left: 0; /* "#menu width" */
-    background: #fff;
+    background: #000;
     background: rgba(0,0,0,0.7);
     font-size: 10px; /* change this value to increase/decrease button size */
     z-index: 10;
@@ -203,15 +196,6 @@ This is the parent `<div>` that contains the menu and the content area.
         left: 150px;
     }
 
-.pure-menu-active>.pure-menu-link, .pure-menu-link:hover, .pure-menu-link:focus {
-  background: #000;
-  background: transparent;
-}
-
-.control-buttons{
-  width:100%;
-  text-align: center;
-}
 
 </style>
 <div id="layout" class="pure-g">
@@ -283,32 +267,17 @@ This is the parent `<div>` that contains the menu and the content area.
   </div>
 
   <div class="right-content pure-u-20-24">
-    <!--
     <div class='header'>
       Wine Quality
     </div>
-    !-->
+    <div class='description'>
+      This is a temp description of the graph.  
+    </div>
+
     <div class='content'>
 
     </div>
-    <div class='description'>
-      <p>
-      Welcome!  
-    </p>
-    <p>
-      We're going to explore some wine data to get a feel for what chemical properties affect the quality of a wine.  We're also going to see what makes red wines different from white wine.
-    </p>
-    <p>
-      I've currently disabled the side bar.  You can click next to take the guided story I have made for you, or you can click skip to start exploring the data yourself.
-    </p>
-    </div>
-    
 
-    
-    <div class='control-buttons'>
-      <a class='skip-button pure-button'>Skip</a>
-      <a class='next-button pure-button'>Next</a>
-    </div>
 
   </div>
 
@@ -323,7 +292,6 @@ This is the parent `<div>` that contains the menu and the content area.
     //Store the types of valid wines and quality scores
     var wine_types = ["red","white"];
     var quality_types = [3,4,5,6,7,8,9];
-    var skip_pressed = false;
 
     //Create global variables that can be altered by uer interactions to subset data
     var redwineon = true;
@@ -354,59 +322,18 @@ This is the parent `<div>` that contains the menu and the content area.
                           "density",
                           "fixed.acidity",
                           "free.sulfur.dioxide",
-                          "pH",
+                          "pH:",
                           "residual.sugar",
                           "sulphates",
                           "total.sulfur.dioxide",
-                          "volatile.acidity",
-                          "quality"]
+                          "volatile.acidity"]
 
-    var plot_descriptions = {"histogram":"A histogram shows the distribution of values of a given quality.  The hight is proportional to the number of data points that fall with in the range of values for a given bin.",
-                              "scatter":"A scatter plot shows each data point where the horizontial and vertical positions represent the values of the quanties listed on the axis.   The size of each point is related to the quality of the wine.  Red points are for red wine, and yellow points are for white wines.",
-                              "trend-line":"A trend line shows how the average  vertical (solid) values and one standard deviation above and below the average (dashed) vary over the horizontial values."}
-    var var_descriptions = { "density":"Denisty of the wine is how much mass a given volume of wine has.  Water has a density of 1000 g/m^3",
-                          "fixed.acidity":"Tartaric acid is found in higher concentrations in wines where grapes come from cooler climates. It is associated with the sourness of a wine.",
-                          "volatile.acidity":"Volatile acidity is acetic acid usually caused by bacteria. This chemical is associated with a vinegar taste in wines.",
-                          "citric.acid":"Citric acid is associated with fruitiness or liveliness of a wine. Wines low is citric acid tend to be considered 'flat'.",
-                          "pH":"pH is the total measure of acidity of a wine that runs from 1 (acid) to 14 (base). To avoid spoilage most wines need to have a pH below 4.",
-                          "residual.sugar":"Residual sugar is associated with the sweetness of the wine. White wines tend to have higher amounts of residual sugar compared to red wines.",
-                          "chlorides":"Chlorides is a measure of sodium chlorides (salt) found in the wine. The effect of salt is disputed on wines, but 'moderate' amounts tend to 'smooth-out' the wine.",
-                          "free.sulfur.dioxide":"Sulfur dioxide can bind with odor producing chemicals and be an antibiotic agent. It also reacts with a number of other chemicals found in wines, so it is used gingerly.",
-                          "total.sulfur.dioxide":"Sulfur dioxide can bind with odor producing chemicals and be an antibiotic agent. It also reacts with a number of other chemicals found in wines, so it is used gingerly.",
-                          "sulphates":"Sulites (data set states sulfates incorrectly) are added to wine to limit microbial growth.",
-                          "alcohol":"Alcohol is the intoxicating agent in wine.  Its why we drink it.",
-                          "quality":"Quality is the average rating of 3 wine experts on a scale from 0 to 10."}
     /*
     Create Click Functions For Subsetting Data and changing class
 
 
     */
 
-    function updateText(){
-      if (drawingHistogram){
-        $(".description").html("<p>"+
-          plot_descriptions["histogram"]+
-          "</p><p>"+
-          var_descriptions[currentVariable1]+
-          "</p>");
-      } else if(drawingScatter){
-        $(".description").html("<p>"+
-          plot_descriptions["scatter"]+
-          "</p><p>"+
-          var_descriptions[currentVariable1]+
-          "</p><p>"+
-          var_descriptions[currentVariable2]+
-          "</p>");
-      } else {
-         $(".description").html("<p>"+
-          plot_descriptions["trend-line"]+
-          "</p><p>"+
-          var_descriptions[currentVariable1]+
-          "</p><p>"+
-          var_descriptions[currentVariable2]+
-          "</p>");
-      }
-    }
 
     function selectHistorgram(){
       drawingHistogram = true;
@@ -446,7 +373,6 @@ This is the parent `<div>` that contains the menu and the content area.
       } else {
         drawAverages(currentVariable1,currentVariable2);
       }
-      updateText();
     }
 
     function click3Wine(){
@@ -608,22 +534,15 @@ This is the parent `<div>` that contains the menu and the content area.
         width = 1024 - 2*margin,
         height = 668 - margin;
 
-    //width = x - 150 - 2*margin;
-    //height = Math.round(768*width/1024) - margin))
-
     function updateWindow(){
       x = w.innerWidth || e.clientWidth || g.clientWidth;
       y = w.innerHeight|| e.clientHeight|| g.clientHeight;
 
       width = x - 150 - 2*margin;
-      height = Math.round(768*y/1024) - margin;
+      height = Math.round(768*(y - margin)/1024);
       //alert(x + "," + y);
-      if(skip_pressed){
-        svg.attr("width", width).attr("height", height);
-        d3.select("svg").attr("width", width).attr("height", height+margin);
-        drawPlot();
-      }
-
+      svg.attr("width", width).attr("height", height);
+      drawPlot();
     }
 
     window.onresize = updateWindow;
@@ -943,32 +862,63 @@ This is the parent `<div>` that contains the menu and the content area.
 
     function draw(data) {
       wine_data = data;
-      $('.skip-button').click(function(){
-        document.getElementById("menu").style.pointerEvents = 'auto';
-        $('.control-buttons').remove()
-        skip_pressed = true;
-        d3.select("svg").attr("height",height);
-        drawHistogram(currentVariable1);
-        updateWindow();
-      });
+      drawHistogram('alcohol');
       document.getElementById("menu").style.pointerEvents = 'none';
-      d3.select("svg").attr("height",0);
-      /*
       setTimeout(function(){
         document.getElementById("red-wine-button").click();
         $("#var1Select").val('chlorides').change();
-        
+        document.getElementById("menu").style.pointerEvents = 'auto';
         //document.getElementById("var1Select").click();
         //document.getElementById("chlorides-option").click();
       },4000);
-      */
+      function update(variable){
+        drawHistogram(variable);
+      };
+      //update("chlorides");
+      //update("pH");
     };
 
       
     </script>
     <script type="text/javascript">
 
+/*
+  (function (window, document) {
 
+      var layout   = document.getElementById('layout'),
+          menu     = document.getElementById('menu'),
+          menuLink = document.getElementById('menuLink');
+
+      function toggleClass(element, className) {
+          var classes = element.className.split(/\s+/),
+              length = classes.length,
+              i = 0;
+
+          for(; i < length; i++) {
+            if (classes[i] === className) {
+              classes.splice(i, 1);
+              break;
+            }
+          }
+          // The className is not found
+          if (length === classes.length) {
+              classes.push(className);
+          }
+
+          element.className = classes.join(' ');
+      }
+
+      menuLink.onclick = function (e) {
+          var active = 'active';
+
+          e.preventDefault();
+          toggleClass(layout, active);
+          toggleClass(menu, active);
+          toggleClass(menuLink, active);
+      };
+
+  }(this, this.document));
+*/
   /* Load Wine Data */
   d3.csv("data/wine.csv",draw);
 

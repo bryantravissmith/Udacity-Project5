@@ -208,11 +208,6 @@ This is the parent `<div>` that contains the menu and the content area.
   background: transparent;
 }
 
-.control-buttons{
-  width:100%;
-  text-align: center;
-}
-
 </style>
 <div id="layout" class="pure-g">
   <div id="menu">
@@ -288,27 +283,14 @@ This is the parent `<div>` that contains the menu and the content area.
       Wine Quality
     </div>
     !-->
+    <div class='description'>
+      This is a temp description of the graph.  
+    </div>
+
     <div class='content'>
 
     </div>
-    <div class='description'>
-      <p>
-      Welcome!  
-    </p>
-    <p>
-      We're going to explore some wine data to get a feel for what chemical properties affect the quality of a wine.  We're also going to see what makes red wines different from white wine.
-    </p>
-    <p>
-      I've currently disabled the side bar.  You can click next to take the guided story I have made for you, or you can click skip to start exploring the data yourself.
-    </p>
-    </div>
-    
 
-    
-    <div class='control-buttons'>
-      <a class='skip-button pure-button'>Skip</a>
-      <a class='next-button pure-button'>Next</a>
-    </div>
 
   </div>
 
@@ -323,7 +305,6 @@ This is the parent `<div>` that contains the menu and the content area.
     //Store the types of valid wines and quality scores
     var wine_types = ["red","white"];
     var quality_types = [3,4,5,6,7,8,9];
-    var skip_pressed = false;
 
     //Create global variables that can be altered by uer interactions to subset data
     var redwineon = true;
@@ -618,12 +599,8 @@ This is the parent `<div>` that contains the menu and the content area.
       width = x - 150 - 2*margin;
       height = Math.round(768*y/1024) - margin;
       //alert(x + "," + y);
-      if(skip_pressed){
-        svg.attr("width", width).attr("height", height);
-        d3.select("svg").attr("width", width).attr("height", height+margin);
-        drawPlot();
-      }
-
+      svg.attr("width", width).attr("height", height);
+      drawPlot();
     }
 
     window.onresize = updateWindow;
@@ -943,32 +920,59 @@ This is the parent `<div>` that contains the menu and the content area.
 
     function draw(data) {
       wine_data = data;
-      $('.skip-button').click(function(){
-        document.getElementById("menu").style.pointerEvents = 'auto';
-        $('.control-buttons').remove()
-        skip_pressed = true;
-        d3.select("svg").attr("height",height);
-        drawHistogram(currentVariable1);
-        updateWindow();
-      });
+      drawHistogram('alcohol');
+      updateWindow();
       document.getElementById("menu").style.pointerEvents = 'none';
-      d3.select("svg").attr("height",0);
-      /*
       setTimeout(function(){
         document.getElementById("red-wine-button").click();
         $("#var1Select").val('chlorides').change();
-        
+        document.getElementById("menu").style.pointerEvents = 'auto';
         //document.getElementById("var1Select").click();
         //document.getElementById("chlorides-option").click();
       },4000);
-      */
     };
 
       
     </script>
     <script type="text/javascript">
 
+/*
+  (function (window, document) {
 
+      var layout   = document.getElementById('layout'),
+          menu     = document.getElementById('menu'),
+          menuLink = document.getElementById('menuLink');
+
+      function toggleClass(element, className) {
+          var classes = element.className.split(/\s+/),
+              length = classes.length,
+              i = 0;
+
+          for(; i < length; i++) {
+            if (classes[i] === className) {
+              classes.splice(i, 1);
+              break;
+            }
+          }
+          // The className is not found
+          if (length === classes.length) {
+              classes.push(className);
+          }
+
+          element.className = classes.join(' ');
+      }
+
+      menuLink.onclick = function (e) {
+          var active = 'active';
+
+          e.preventDefault();
+          toggleClass(layout, active);
+          toggleClass(menu, active);
+          toggleClass(menuLink, active);
+      };
+
+  }(this, this.document));
+*/
   /* Load Wine Data */
   d3.csv("data/wine.csv",draw);
 
