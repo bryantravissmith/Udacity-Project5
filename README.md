@@ -20,15 +20,15 @@ My friend Travis thought some trend lines would help digest the information bett
 
 My feed back was gaged in person where I asked people nere me to "look at this" and guided them through the final story I have implemented.   This coverstaion were less then 15 minutes.  
 
-##0
+##1
 A student suggested that I use a css framework and move the menu from the right side of the graphic to the left side of the graphic. 
 
-##1
+##2
 My wife examined an early version of the visualization.  She thought I should use percentages instad of raw counts for displaying the values in the histogram bars, and to add discriptions of the variables/graphs below each graph.  She liked the sidebar menu to control the visualization.  She was also adimate that drinking wine is better then making graphs of wine.  
 
 
-##2
-My friend said that there were too many points to get a feel for trends and would have liked to added a best fit line.  He also said the plot was not fitting in his browser.  He was very inerested in the wine, being a self professed 'Wino', and expressed that he would like to see this again if I found similar data for California wines.    
+##3
+My friend Travis said that there were too many points to get a feel for trends and would have liked to added a best fit line.  He also said the plot was not fitting in his browser.  He was very inerested in the wine, being a self professed 'Wino', and expressed that he would like to see this again if I found similar data for California wines.    
 
 
 #Resources
